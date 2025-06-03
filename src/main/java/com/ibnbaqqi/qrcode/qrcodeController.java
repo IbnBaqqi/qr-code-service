@@ -1,5 +1,6 @@
 package com.ibnbaqqi.qrcode;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,6 @@ public class qrcodeController {
 
         var image = qrcodeService.generateImage();
 
-        return ResponseEntity.ok().body(image);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(image);
     }
 }
