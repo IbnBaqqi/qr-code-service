@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.awt.image.BufferedImage;
 
 @RestController
 @RequestMapping("/api")
@@ -24,7 +23,7 @@ public class qrcodeController {
     }
 
     @GetMapping("/qrcode")
-    public ResponseEntity<BufferedImage> qrcode() {
+    public ResponseEntity<byte[]> qrcode() {
 
         var image = qrcodeService.generateImage();
 
