@@ -6,23 +6,17 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.util.Set;
 
 @Service
 public class qrcodeService {
 
     public byte[] generateImage(int size, String type) {
 
-        if (size < 150 || size > 350)
-            throw new SizeException();
-        if (!Set.of("png", "jpeg", "gif").contains(type))
-            throw new TypeException();
-
         var bufferedImage = getBufferedImage(size);
         byte[] bytes;
 
         try (var byteArray = new ByteArrayOutputStream()) {
-            ImageIO.write(bufferedImage, "png", byteArray); // writing the image in the PNG format
+            ImageIO.write(bufferedImage, type, byteArray); // writing the image in the PNG format
             bytes = byteArray.toByteArray();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
