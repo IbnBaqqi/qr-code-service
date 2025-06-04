@@ -6,13 +6,19 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.util.Set;
 
 @Service
 public class qrcodeService {
 
-    public byte[] generateImage() {
+    public byte[] generateImage(int size, String type) {
 
-        var bufferedImage = getBufferedImage();
+        if (size < 150 || size > 350)
+            throw new SizeException();
+        if (!Set.of("png", "jpeg", "gif").contains(type))
+            throw new TypeException();
+
+        var bufferedImage = getBufferedImage(size);
         byte[] bytes;
 
         try (var byteArray = new ByteArrayOutputStream()) {
@@ -25,12 +31,12 @@ public class qrcodeService {
         return bytes;
     }
 
-    private static BufferedImage getBufferedImage() {
-        var image = new BufferedImage(250, 250, 8); // 250x250 pixel image & 8-bit RGB color space
+    private static BufferedImage getBufferedImage(int size) {
+        var image = new BufferedImage(size, size, 8); // 250x250 pixel image & 8-bit RGB color space
         Graphics2D g = image.createGraphics();
 
         g.setColor(Color.WHITE);
-        g.fillRect(0, 0, 250, 250);
+        g.fillRect(0, 0, size, size);
         return image;
     }
 }
