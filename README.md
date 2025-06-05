@@ -100,4 +100,4 @@ Invalid input returns `400 Bad Request`.
 
 ## 🐛 Found a Bug?
 
-Please [open an issue](https://github.com/IbnBaqqi/qrcode-api/issues) with steps to reproduce or an example request.
+Please [open an issue](https://github.com/IbnBaqqi/qr-code-service/issues) with steps to reproduce or an example request.
