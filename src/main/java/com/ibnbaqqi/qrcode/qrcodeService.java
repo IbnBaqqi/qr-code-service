@@ -1,5 +1,10 @@
 package com.ibnbaqqi.qrcode;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -10,19 +15,31 @@ import java.io.ByteArrayOutputStream;
 @Service
 public class qrcodeService {
 
-    public byte[] generateImage(int size, String type) {
+    public byte[] generateByteImage(String content, int size, String type) {
 
         var bufferedImage = getBufferedImage(size);
+        var image = generateQR(bufferedImage, content, size);
         byte[] bytes;
 
         try (var byteArray = new ByteArrayOutputStream()) {
-            ImageIO.write(bufferedImage, type, byteArray); // writing the image in the PNG format
+            ImageIO.write(image, type, byteArray); // writing the image in the given format(png, gif, jpeg)
             bytes = byteArray.toByteArray();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
 
         return bytes;
+    }
+
+    public BufferedImage generateQR(BufferedImage image, String data, int size) {
+        QRCodeWriter writer = new QRCodeWriter();
+        try {
+            BitMatrix bitMatrix = writer.encode(data, BarcodeFormat.QR_CODE, size, size); //encode data in bitMatrix
+            image = MatrixToImageWriter.toBufferedImage(bitMatrix);
+        } catch (WriterException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return image;
     }
 
     private static BufferedImage getBufferedImage(int size) {
