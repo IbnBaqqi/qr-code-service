@@ -32,14 +32,15 @@ public class qrcodeController {
 
         if (size < 150 || size > 350)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Image size must be between 150 and 350 pixels");
-        if (!Set.of("png", "jpeg", "gif").contains(type))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only png, jpeg and gif image types are supported");
+
+//        if (!Set.of("png", "jpeg", "gif").contains(type))
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only png, jpeg and gif image types are supported");
 
         MediaType imageType = switch (type) {
             case "png" -> MediaType.IMAGE_PNG;
             case "jpeg" -> MediaType.IMAGE_JPEG;
             case "gif" -> MediaType.IMAGE_GIF;
-            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST); // never going to get here
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only png, jpeg and gif image types are supported");
         };
 
         var image = qrcodeService.generateByteImage(content, size, type);
