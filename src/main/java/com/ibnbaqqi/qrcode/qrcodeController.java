@@ -25,7 +25,10 @@ public class qrcodeController {
     }
 
     @GetMapping("/qrcode")
-    public ResponseEntity<byte[]> qrcode(@RequestParam int size, @RequestParam String type) {
+    public ResponseEntity<byte[]> qrcode(@RequestParam String content, @RequestParam int size, @RequestParam String type) {
+
+        if(content.isBlank())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Contents cannot be null or blank");
 
         if (size < 150 || size > 350)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Image size must be between 150 and 350 pixels");
@@ -39,7 +42,7 @@ public class qrcodeController {
             default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST); // never going to get here
         };
 
-        var image = qrcodeService.generateImage(size, type);
+        var image = qrcodeService.generateByteImage(content, size, type);
 
         return ResponseEntity.ok().contentType(imageType).body(image);
     }
