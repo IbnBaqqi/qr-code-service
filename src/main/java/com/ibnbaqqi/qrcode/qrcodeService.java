@@ -17,8 +17,9 @@ public class qrcodeService {
 
     public byte[] generateByteImage(String content, int size, String type) {
 
-        var bufferedImage = getBufferedImage(size);
-        var image = generateQR(bufferedImage, content, size);
+//        var bufferedImage = getBufferedImage(size);
+
+        var image = generateQR(content, size);
         byte[] bytes;
 
         try (var byteArray = new ByteArrayOutputStream()) {
@@ -31,17 +32,22 @@ public class qrcodeService {
         return bytes;
     }
 
-    public BufferedImage generateQR(BufferedImage image, String data, int size) {
+    public BufferedImage generateQR(String data, int size) {
+
         QRCodeWriter writer = new QRCodeWriter();
+        BufferedImage bufferedImage;
+
         try {
             BitMatrix bitMatrix = writer.encode(data, BarcodeFormat.QR_CODE, size, size); //encode data in bitMatrix
-            image = MatrixToImageWriter.toBufferedImage(bitMatrix);
+            bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
         } catch (WriterException e) {
             throw new RuntimeException(e.getMessage());
         }
-        return image;
+
+        return bufferedImage;
     }
 
+    @Deprecated
     private static BufferedImage getBufferedImage(int size) {
         var image = new BufferedImage(size, size, 8); // 250x250 pixel image & 8-bit RGB color space
         Graphics2D g = image.createGraphics();
