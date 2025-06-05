@@ -1,6 +1,7 @@
 package com.ibnbaqqi.qrcode;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
@@ -11,15 +12,14 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.util.Map;
 
 @Service
 public class qrcodeService {
 
-    public byte[] generateByteImage(String content, int size, String type) {
+    public byte[] generateByteImage(String content, int size, String type, char correction) {
 
-//        var bufferedImage = getBufferedImage(size);
-
-        var image = generateQR(content, size);
+        var image = generateQR(content, size, correction);
         byte[] bytes;
 
         try (var byteArray = new ByteArrayOutputStream()) {
@@ -32,13 +32,14 @@ public class qrcodeService {
         return bytes;
     }
 
-    public BufferedImage generateQR(String data, int size) {
+    public BufferedImage generateQR(String data, int size, char correction) {
 
         QRCodeWriter writer = new QRCodeWriter();
         BufferedImage bufferedImage;
+        Map<EncodeHintType, ?> hints = Map.of(EncodeHintType.ERROR_CORRECTION, correction); //for setting error level
 
         try {
-            BitMatrix bitMatrix = writer.encode(data, BarcodeFormat.QR_CODE, size, size); //encode data in bitMatrix
+            BitMatrix bitMatrix = writer.encode(data, BarcodeFormat.QR_CODE, size, size, hints); //encode data in bitMatrix
             bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
         } catch (WriterException e) {
             throw new RuntimeException(e.getMessage());
