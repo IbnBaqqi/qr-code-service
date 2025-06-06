@@ -91,7 +91,7 @@ Invalid input returns `400 Bad Request`.
 
 ## 🔧 Tech Stack
 
-- Java 17+
+- Java 21
 - Spring Boot
 - Gradle
 - ZXing
